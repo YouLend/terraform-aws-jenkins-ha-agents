@@ -267,6 +267,7 @@ resource "aws_autoscaling_group" "agent_asg" {
 
   max_size = var.agent_max
   min_size = var.agent_min
+  desired_capacity_type = "units"
 
   health_check_grace_period = 300
   health_check_type         = "EC2"
@@ -374,6 +375,7 @@ resource "aws_autoscaling_policy" "agent_scale_up_policy" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 150
   autoscaling_group_name = aws_autoscaling_group.agent_asg.name
+  enabled                = var.env_name == "headquarter" ? false : true
 }
 
 resource "aws_autoscaling_policy" "agent_scale_down_policy" {
@@ -382,6 +384,7 @@ resource "aws_autoscaling_policy" "agent_scale_down_policy" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 180
   autoscaling_group_name = aws_autoscaling_group.agent_asg.name
+  enabled                = var.env_name == "headquarter" ? false : true
 }
 
 ##################################################################
