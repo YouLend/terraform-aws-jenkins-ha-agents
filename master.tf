@@ -400,7 +400,6 @@ resource "aws_ssm_parameter" "admin_password" {
   description = "${var.application}-admin-password"
   type        = "SecureString"
   value       = var.admin_password
-  overwrite   = true
 }
 
 #tfsec:ignore:aws-cloudwatch-log-group-customer-key
