@@ -307,6 +307,8 @@ resource "aws_launch_template" "master_lt" {
     http_tokens = "required"
   }
   tags = merge(var.tags, { "Name" = "${var.application}-master-lt" })
+  
+  update_default_version = true
 }
 
 #tfsec:ignore:aws-ec2-no-public-egress-sgr tfsec:ignore:aws-ec2-no-public-ingress-sgr tfsec:ignore:aws-vpc-no-public-egress-sgr tfsec:ignore:aws-vpc-no-public-ingress-sgr

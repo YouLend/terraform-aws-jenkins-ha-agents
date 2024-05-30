@@ -281,7 +281,8 @@ resource "aws_autoscaling_group" "agent_asg" {
     instances_distribution {
       #on_demand_base_capacity                  = (var.enable_spot_insances==1)?0:100
       on_demand_percentage_above_base_capacity = (var.enable_spot_insances == 1) ? 0 : 100
-      spot_instance_pools                      = (var.enable_spot_insances == 1) ? length(var.agent_instance_type) : 0
+      #spot_instance_pools must be at least 2, since spot_allocation_strategy defaults to "lowest-price" when not set. If we set it to anything other than "lowest-price", spot_instance_pools must be 0.
+      spot_instance_pools                      = (var.enable_spot_insances == 1) ? length(var.agent_instance_type) : 2
     }
 
     launch_template {
@@ -362,6 +363,7 @@ resource "aws_launch_template" "agent_lt" {
     http_tokens = "required"
   }
   tags = merge(var.tags, { "Name" = "${var.application}-agent-lt" })
+  update_default_version = true
 }
 
 ##################################################################
