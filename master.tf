@@ -286,7 +286,7 @@ resource "aws_launch_template" "master_lt" {
   ebs_optimized = false
 
   instance_type = var.master_instance_type
-  user_data     = data.template_cloudinit_config.master_init.rendered
+  user_data     = data.cloudinit_config.master_init.rendered
 
   monitoring {
     enabled = true

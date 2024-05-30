@@ -73,7 +73,7 @@ resource "aws_launch_template" "agent_multi_deploy_lt" {
   ebs_optimized = false
 
   instance_type = var.agent_multi_deploy_instance_type
-  user_data     = data.template_cloudinit_config.agent_multi_deploy_init.rendered
+  user_data     = data.cloudinit_config.agent_multi_deploy_init.rendered
 
   monitoring {
     enabled = true

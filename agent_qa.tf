@@ -78,7 +78,7 @@ resource "aws_launch_template" "agent_qa_lt" {
   ebs_optimized = false
 
   instance_type = var.qa_agent_instance_type
-  user_data     = data.template_cloudinit_config.qa_agent_init.rendered
+  user_data     = data.cloudinit_config.qa_agent_init.rendered
 
   monitoring {
     enabled = true

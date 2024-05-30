@@ -9,6 +9,10 @@ terraform {
       source  = "hashicorp/template"
       version = ">= 2.1"
     }
+    cloudinit = {
+      source  = "hashicorp/cloudinit"
+      version = ">= 2.3.4"
+    }
   }
 }
 

@@ -340,7 +340,7 @@ resource "aws_launch_template" "agent_lt" {
   ebs_optimized = false
 
   instance_type = var.agent_instance_type
-  user_data     = data.template_cloudinit_config.agent_init.rendered
+  user_data     = data.cloudinit_config.agent_init.rendered
 
   monitoring {
     enabled = true
