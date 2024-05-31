@@ -307,7 +307,7 @@ resource "aws_launch_template" "master_lt" {
     http_tokens = "required"
   }
   tags = merge(var.tags, { "Name" = "${var.application}-master-lt" })
-  
+
   update_default_version = true
 }
 

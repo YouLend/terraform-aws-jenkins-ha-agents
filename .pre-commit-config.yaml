@@ -5,7 +5,6 @@ repos:
   - id: terraform_fmt
   - id: terraform_docs
   - id: terraform_tflint
-  - id: terragrunt_validate
   - id: terraform_tfsec
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0

@@ -177,22 +177,22 @@ variable "master_instance_type" {
   default     = "m5.16xlarge"
 }
 variable "agent_instance_type" {
- description = "The type of instances to use for the agent instance."
- type        = string
- default     = "t3.medium"
- }
+  description = "The type of instances to use for the agent instance."
+  type        = string
+  default     = "t3.medium"
+}
 
- variable "agent_multi_deploy_instance_type" {
+variable "agent_multi_deploy_instance_type" {
   description = "The type of instances to use for the multi deployment instance."
   type        = string
   default     = "c5.2xlarge"
 }
 
 variable "qa_agent_instance_type" {
- description = "The type of instances to use for the QA agent instance."
- type        = string
- default     = "t3.large"
- }
+  description = "The type of instances to use for the QA agent instance."
+  type        = string
+  default     = "t3.large"
+}
 
 variable "jenkins_version" {
   description = "The version number of Jenkins to use on the master. Change this value when a new version comes out, and it will update the launch configuration and the autoscaling group."
