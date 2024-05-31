@@ -426,7 +426,7 @@ resource "aws_autoscaling_schedule" "agent_asg_scale_up" {
   scheduled_action_name  = "agent-asg-scale-up"
   min_size               = var.agent_min
   max_size               = var.agent_max
-  desired_capacity       = var.agent_max
+  desired_capacity       = var.desired_capacity
   recurrence             = "0 7 * * 1-5" # Monday-Friday at 7am UTC
   time_zone              = "Europe/London"
   autoscaling_group_name = aws_autoscaling_group.agent_asg.name
