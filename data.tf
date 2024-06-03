@@ -2,19 +2,19 @@
 ##################################################################
 # Agent User Data
 ##################################################################
-data "template_cloudinit_config" "agent_init" {
+data "cloudinit_config" "agent_init" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "agent.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_write_files.rendered
+    content      = local.agent_write_files
   }
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_runcmd.rendered
+    content      = local.agent_runcmd
   }
 
   part {
@@ -25,56 +25,27 @@ data "template_cloudinit_config" "agent_init" {
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_end.rendered
+    content      = local.agent_end
     merge_type   = "list(append)+dict(recurse_array)+str()"
   }
-}
-
-data "template_file" "agent_write_files" {
-  template = file("${path.module}/init/agent-write-files.cfg")
-
-  vars = {
-    swarm_label      = "swarm-eu" #All Labels you want Agent to have must be separated with space
-    agent_logs       = aws_cloudwatch_log_group.agent_logs.name
-    aws_region       = var.region
-    executors        = var.executors
-    swarm_version    = var.swarm_version
-    jenkins_username = var.jenkins_username
-  }
-}
-
-
-data "template_file" "agent_runcmd" {
-  template = file("${path.module}/init/agent-runcmd.cfg")
-
-  vars = {
-    api_ssm_parameter = "${var.ssm_parameter}${var.api_ssm_parameter}"
-    aws_master_region = var.aws_master_region
-    master_asg        = aws_autoscaling_group.master_asg.name
-    swarm_version     = var.swarm_version
-  }
-}
-
-data "template_file" "agent_end" {
-  template = file("${path.module}/init/agent-end.cfg")
 }
 
 ##################################################################
 # QA Agent User Data
 ##################################################################
-data "template_cloudinit_config" "qa_agent_init" {
+data "cloudinit_config" "qa_agent_init" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "qa_agent.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.qa_agent_write_files.rendered
+    content      = local.qa_agent_write_files
   }
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.qa_agent_runcmd.rendered
+    content      = local.qa_agent_runcmd
   }
 
   part {
@@ -85,50 +56,22 @@ data "template_cloudinit_config" "qa_agent_init" {
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.qa_agent_end.rendered
+    content      = local.qa_agent_end
     merge_type   = "list(append)+dict(recurse_array)+str()"
   }
 }
 
-data "template_file" "qa_agent_write_files" {
-  template = file("${path.module}/init/qa-agent-write-files.cfg")
-
-  vars = {
-    swarm_label      = "swarm-qa" #All Labels you want Agent to have must be separated with space
-    agent_logs       = aws_cloudwatch_log_group.agent_logs.name
-    aws_region       = var.region
-    executors        = var.executors
-    swarm_version    = var.swarm_version
-    jenkins_username = var.jenkins_username
-  }
-}
-
-
-data "template_file" "qa_agent_runcmd" {
-  template = file("${path.module}/init/qa-agent-runcmd.cfg")
-
-  vars = {
-    api_ssm_parameter = "${var.ssm_parameter}${var.api_ssm_parameter}"
-    aws_master_region = var.aws_master_region
-    master_asg        = aws_autoscaling_group.master_asg.name
-    swarm_version     = var.swarm_version
-  }
-}
-
-data "template_file" "qa_agent_end" {
-  template = file("${path.module}/init/qa-agent-end.cfg")
-}
 ##################################################################
 # Master User Data
 ##################################################################
-data "template_cloudinit_config" "master_init" {
+data "cloudinit_config" "master_init" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "master.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.master_write_files.rendered
+    content      = local.master_write_files
   }
 
   part {
@@ -139,7 +82,7 @@ data "template_cloudinit_config" "master_init" {
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.master_runcmd.rendered
+    content      = local.master_runcmd
   }
 
   part {
@@ -149,43 +92,10 @@ data "template_cloudinit_config" "master_init" {
   }
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.master_end.rendered
+    content      = local.master_end
     merge_type   = "list(append)+dict(recurse_array)+str()"
   }
 
-}
-
-data "template_file" "master_write_files" {
-  template = file("${path.module}/init/master-write-files.cfg")
-
-  vars = {
-    admin_password           = var.admin_password
-    api_ssm_parameter        = "${var.ssm_parameter}${var.api_ssm_parameter}"
-    application              = var.application
-    auto_update_plugins_cron = var.auto_update_plugins_cron
-    aws_region               = var.region
-    executors_min            = var.agent_min * var.executors
-    master_logs              = aws_cloudwatch_log_group.master_logs.name
-    jenkins_name             = var.jenkins_name
-  }
-}
-
-
-data "template_file" "master_runcmd" {
-  template = file("${path.module}/init/master-runcmd.cfg")
-
-  vars = {
-    admin_password  = var.admin_password
-    aws_region      = var.region
-    jenkins_version = var.jenkins_version
-    master_storage  = aws_efs_file_system.master_efs.id
-    env_name        = var.env_name
-
-  }
-}
-
-data "template_file" "master_end" {
-  template = file("${path.module}/init/master-end.cfg")
 }
 
 resource "aws_efs_file_system" "master_efs" {
@@ -203,19 +113,19 @@ resource "aws_efs_file_system" "master_efs" {
 # Database Agent User Data
 ##################################################################
 
-data "template_cloudinit_config" "agent_multi_deploy_init" {
+data "cloudinit_config" "agent_multi_deploy_init" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "agent.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_multi_deploy_write_files.rendered
+    content      = local.agent_multi_deploy_write_files
   }
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_runcmd.rendered
+    content      = local.agent_runcmd
   }
 
   part {
@@ -226,21 +136,8 @@ data "template_cloudinit_config" "agent_multi_deploy_init" {
 
   part {
     content_type = "text/cloud-config"
-    content      = data.template_file.agent_end.rendered
+    content      = local.agent_end
     merge_type   = "list(append)+dict(recurse_array)+str()"
-  }
-}
-
-data "template_file" "agent_multi_deploy_write_files" {
-  template = file("${path.module}/init/agent-write-files.cfg")
-
-  vars = {
-    swarm_label      = "swarm-multi-deploy"
-    agent_logs       = aws_cloudwatch_log_group.agent_logs.name
-    aws_region       = var.region
-    executors        = var.executors
-    swarm_version    = var.swarm_version
-    jenkins_username = var.jenkins_username
   }
 }
 

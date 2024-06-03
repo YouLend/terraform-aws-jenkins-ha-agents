@@ -1,8 +1,4 @@
-![logo](https://github.com/neiman-marcus/terraform-aws-jenkins-ha-agents/raw/master/images/logo.png 'Neiman Marcus')
-
 # terraform-aws-jenkins-ha-agents
-
-[![verson](https://img.shields.io/github/v/release/neiman-marcus/terraform-aws-jenkins-ha-agents)](https://registry.terraform.io/modules/neiman-marcus/jenkins-ha-agents/aws) [![build](https://img.shields.io/github/workflow/status/neiman-marcus/terraform-aws-jenkins-ha-agents/ci)](https://github.com/neiman-marcus/terraform-aws-jenkins-ha-agents/actions?query=workflow%3Aci) [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/neiman-marcus/terraform-aws-jenkins-ha-agents/blob/master/LICENSE) [![pr](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/neiman-marcus/terraform-aws-jenkins-ha-agents/blob/master/CONTRIBUTING.md)
 
 A module for deploying Jenkins in a highly available and highly scalable manner.
 
@@ -17,14 +13,6 @@ Related blog post can be found on the [Neiman Marcus Medium page](https://medium
 - Spot instance pricing for agents
 - Custom user data available
 - Auto update plugins
-
-## Terraform & Module Version
-
-**Terraform 0.13** - Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
-
-**Terraform 0.12** - Pin module version to `~> v2.0`. Submit pull-requests to `terraform12` branch. Only bug fixes will be accepted. All new developement will be on Terraform 0.13.
-
-**Terraform 0.11** - Deprecated in this module.
 
 ## Usage
 
@@ -179,6 +167,7 @@ runcmd:
 | Name | Version |
 |------|---------|
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 2.25 |
+| <a name="requirement_cloudinit"></a> [cloudinit](#requirement\_cloudinit) | >= 2.3.4 |
 | <a name="requirement_template"></a> [template](#requirement\_template) | >= 2.1 |
 
 ## Providers
@@ -186,7 +175,7 @@ runcmd:
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 4.28.0 |
-| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
+| <a name="provider_cloudinit"></a> [cloudinit](#provider\_cloudinit) | >= 2.3.4 |
 
 ## Modules
 
@@ -198,15 +187,20 @@ No modules.
 |------|------|
 | [aws_autoscaling_group.agent_asg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
 | [aws_autoscaling_group.agent_multi_deploy_asg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
+| [aws_autoscaling_group.agent_qa_asg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
 | [aws_autoscaling_group.master_asg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
 | [aws_autoscaling_policy.agent_multi_deploy_scale_down_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_policy.agent_multi_deploy_scale_up_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
+| [aws_autoscaling_policy.agent_qa_scale_down_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
+| [aws_autoscaling_policy.agent_qa_scale_up_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_policy.agent_scale_down_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_policy.agent_scale_up_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_schedule.agent_asg_scale_down](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_autoscaling_schedule.agent_asg_scale_up](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_autoscaling_schedule.agent_multi_deploy_asg_scale_down](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_autoscaling_schedule.agent_multi_deploy_asg_scale_up](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
+| [aws_autoscaling_schedule.agent_qa_asg_scale_down](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
+| [aws_autoscaling_schedule.agent_qa_asg_scale_up](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_cloudwatch_log_group.agent_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.master_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_metric_alarm.agent_cpu_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
@@ -227,8 +221,9 @@ No modules.
 | [aws_iam_role_policy.master_secret_manager_inline_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.agent_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.master_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_launch_template.agent_multi_deploy_lt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_launch_template.agent_lt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
+| [aws_launch_template.agent_multi_deploy_lt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
+| [aws_launch_template.agent_qa_lt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_launch_template.master_lt](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_lb.private_lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) | resource |
 | [aws_lb_listener.master_http_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
@@ -249,26 +244,25 @@ No modules.
 | [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
-| [template_cloudinit_config.agent_multi_deploy_init](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config) | data source |
-| [template_cloudinit_config.agent_init](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config) | data source |
-| [template_cloudinit_config.master_init](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config) | data source |
-| [template_file.agent_multi_deploy_write_files](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.agent_end](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.agent_runcmd](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.agent_write_files](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.master_end](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.master_runcmd](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
-| [template_file.master_write_files](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [cloudinit_config.agent_init](https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config) | data source |
+| [cloudinit_config.agent_multi_deploy_init](https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config) | data source |
+| [cloudinit_config.master_init](https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config) | data source |
+| [cloudinit_config.qa_agent_init](https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_password"></a> [admin\_password](#input\_admin\_password) | The master admin password. Used to bootstrap and login to the master. Also pushed to ssm parameter store for posterity. | `string` | n/a | yes |
-| <a name="input_agent_multi_deploy_volume_size"></a> [agent\_multi_deploy\_volume\_size](#input\_agent\_multi_deploy\_volume\_size) | The size of the database agent volume. | `number` | `16` | no |
+| <a name="input_agent_instance_type"></a> [agent\_instance\_type](#input\_agent\_instance\_type) | The type of instances to use for the agent instance. | `string` | `"t3.medium"` | no |
 | <a name="input_agent_lt_version"></a> [agent\_lt\_version](#input\_agent\_lt\_version) | The version of the agent launch template to use. Only use if you need to programatically select an older version of the launch template. Not recommended to change. | `string` | `"$Latest"` | no |
-| <a name="input_agent_max"></a> [agent\_max](#input\_agent\_max) | The maximum number of agents to run in the agent ASG. | `number` | `4` | no |
+| <a name="input_agent_max"></a> [agent\_max](#input\_agent\_max) | The maximum number of agents to run in the agent ASG. | `number` | n/a | yes |
 | <a name="input_agent_min"></a> [agent\_min](#input\_agent\_min) | The minimum number of agents to run in the agent ASG. | `number` | `2` | no |
+| <a name="input_agent_multi_deploy_instance_type"></a> [agent\_multi\_deploy\_instance\_type](#input\_agent\_multi\_deploy\_instance\_type) | The type of instances to use for the multi deployment instance. | `string` | `"c5.2xlarge"` | no |
+| <a name="input_agent_multi_deploy_max"></a> [agent\_multi\_deploy\_max](#input\_agent\_multi\_deploy\_max) | The maximum number of multi deployment agents to run in the agent ASG. | `number` | n/a | yes |
+| <a name="input_agent_multi_deploy_volume_size"></a> [agent\_multi\_deploy\_volume\_size](#input\_agent\_multi\_deploy\_volume\_size) | The size of the multi deployment agent volume. | `number` | `16` | no |
+| <a name="input_agent_qa_max"></a> [agent\_qa\_max](#input\_agent\_qa\_max) | The maximum number of qa agents to run in the agent ASG. | `number` | n/a | yes |
+| <a name="input_agent_qa_volume_size"></a> [agent\_qa\_volume\_size](#input\_agent\_qa\_volume\_size) | The size of the QA agent volume. | `number` | `16` | no |
 | <a name="input_agent_volume_size"></a> [agent\_volume\_size](#input\_agent\_volume\_size) | The size of the agent volume. | `number` | `16` | no |
 | <a name="input_ami_name"></a> [ami\_name](#input\_ami\_name) | The name of the amzn2 ami. Used for searching for AMI id. | `string` | `"amzn2-ami-hvm-2.0.*-x86_64-gp2"` | no |
 | <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | The owner of the amzn2 ami. | `string` | `"amazon"` | no |
@@ -290,7 +284,8 @@ No modules.
 | <a name="input_extra_agent_userdata_merge"></a> [extra\_agent\_userdata\_merge](#input\_extra\_agent\_userdata\_merge) | Control how cloud-init merges extra agent user-data sections. | `string` | `"list(append)+dict(recurse_array)+str()"` | no |
 | <a name="input_extra_master_userdata"></a> [extra\_master\_userdata](#input\_extra\_master\_userdata) | Extra master user-data to add to the default built-in. | `string` | `""` | no |
 | <a name="input_extra_master_userdata_merge"></a> [extra\_master\_userdata\_merge](#input\_extra\_master\_userdata\_merge) | Control how cloud-init merges extra master user-data sections. | `string` | `"list(append)+dict(recurse_array)+str()"` | no |
-| <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The type of instances to use for both ASG's. The first value in the list will be set as the master instance. | `list(string)` | n/a | yes |
+| <a name="input_extra_qa_agent_userdata"></a> [extra\_qa\_agent\_userdata](#input\_extra\_qa\_agent\_userdata) | Extra qa agent user-data to add to the default built-in. | `string` | `""` | no |
+| <a name="input_extra_qa_agent_userdata_merge"></a> [extra\_qa\_agent\_userdata\_merge](#input\_extra\_qa\_agent\_userdata\_merge) | Control how cloud-init merges extra qa agent user-data sections. | `string` | `"list(append)+dict(recurse_array)+str()"` | no |
 | <a name="input_jenkins_name"></a> [jenkins\_name](#input\_jenkins\_name) | The internal name of jenkins (e.g jenkins-headquarter, jenkins-testhq) | `string` | n/a | yes |
 | <a name="input_jenkins_username"></a> [jenkins\_username](#input\_jenkins\_username) | Special username to connect the agents. Useful when you want to use Azure AD authentication, then you need to pass an username that exisits in the AD, otherwise agents wont be able to connect to amster when you switch over to Azure AD auth with configuration as code plugin | `string` | n/a | yes |
 | <a name="input_jenkins_version"></a> [jenkins\_version](#input\_jenkins\_version) | The version number of Jenkins to use on the master. Change this value when a new version comes out, and it will update the launch configuration and the autoscaling group. | `string` | `"2.332.3"` | no |
@@ -298,17 +293,21 @@ No modules.
 | <a name="input_jks_eks_nlb_sg_id"></a> [jks\_eks\_nlb\_sg\_id](#input\_jks\_eks\_nlb\_sg\_id) | The ID for the JKS EKS NLB Security Group | `string` | n/a | yes |
 | <a name="input_jks_eks_target_group_arn"></a> [jks\_eks\_target\_group\_arn](#input\_jks\_eks\_target\_group\_arn) | The ARN for the JKS EKS target group | `string` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | SSH Key to launch instances. | `string` | `null` | no |
+| <a name="input_master_instance_type"></a> [master\_instance\_type](#input\_master\_instance\_type) | The type of instances to use for the master instance. | `string` | `"m5.16xlarge"` | no |
 | <a name="input_master_lt_version"></a> [master\_lt\_version](#input\_master\_lt\_version) | The version of the master launch template to use. Only use if you need to programatically select an older version of the launch template. Not recommended to change. | `string` | `"$Latest"` | no |
 | <a name="input_password_ssm_parameter"></a> [password\_ssm\_parameter](#input\_password\_ssm\_parameter) | The path value of the master admin passowrd, stored in ssm parameter store. | `string` | `"/admin_password"` | no |
 | <a name="input_private_subnet_name"></a> [private\_subnet\_name](#input\_private\_subnet\_name) | The name prefix of the private subnets to pull in as a data source. | `string` | n/a | yes |
 | <a name="input_public_subnet_name"></a> [public\_subnet\_name](#input\_public\_subnet\_name) | The name prefix of the public subnets to pull in as a data source. | `string` | n/a | yes |
+| <a name="input_qa_agent_instance_type"></a> [qa\_agent\_instance\_type](#input\_qa\_agent\_instance\_type) | The type of instances to use for the QA agent instance. | `string` | `"t3.large"` | no |
 | <a name="input_r53_record"></a> [r53\_record](#input\_r53\_record) | The FQDN for the route 53 record. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region to deploy the infrastructure too. | `string` | n/a | yes |
 | <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | How many days to retain cloudwatch logs. | `number` | `90` | no |
 | <a name="input_scale_down_number"></a> [scale\_down\_number](#input\_scale\_down\_number) | Number of agents to destroy when scaling down. | `number` | `-1` | no |
-| <a name="input_scale_down_number_multi_deploy"></a> [scale\_down\_number\_multi_deploy](#input\_scale\_down\_number\_multi_deploy) | Number of database agents to destroy when scaling down. | `number` | `-1` | no |
+| <a name="input_scale_down_number_multi_deploy"></a> [scale\_down\_number\_multi\_deploy](#input\_scale\_down\_number\_multi\_deploy) | Number of mutli deployment agents to destroy when scaling down. | `number` | `-1` | no |
+| <a name="input_scale_down_number_qa"></a> [scale\_down\_number\_qa](#input\_scale\_down\_number\_qa) | Number of QA agents to destroy when scaling down. | `number` | `-1` | no |
 | <a name="input_scale_up_number"></a> [scale\_up\_number](#input\_scale\_up\_number) | Number of agents to create when scaling up. | `number` | `1` | no |
-| <a name="input_scale_up_number_multi_deploy"></a> [scale\_up\_number\_multi_deploy](#input\_scale\_up\_number\_multi_deploy) | Number of database agents to create when scaling up. | `number` | `1` | no |
+| <a name="input_scale_up_number_multi_deploy"></a> [scale\_up\_number\_multi\_deploy](#input\_scale\_up\_number\_multi\_deploy) | Number of multi deployment agents to create when scaling up. | `number` | `1` | no |
+| <a name="input_scale_up_number_qa"></a> [scale\_up\_number\_qa](#input\_scale\_up\_number\_qa) | Number of QA agents to create when scaling up. | `number` | `1` | no |
 | <a name="input_ssl_certificate"></a> [ssl\_certificate](#input\_ssl\_certificate) | The name of the SSL certificate to use on the load balancer. | `string` | n/a | yes |
 | <a name="input_ssm_kms_key"></a> [ssm\_kms\_key](#input\_ssm\_kms\_key) | The alias or arn of the KMS key that is designated for SSM session encryption | `string` | n/a | yes |
 | <a name="input_ssm_parameter"></a> [ssm\_parameter](#input\_ssm\_parameter) | The full ssm parameter path that will house the api key and master admin password. Also used to grant IAM access to this resource. | `string` | n/a | yes |
@@ -397,7 +396,7 @@ The master has the ability to check for plugin updates, and automatically instal
 
 ## Diagram
 
-![Diagram](https://github.com/neiman-marcus/terraform-aws-jenkins-ha-agents/raw/master/images/diagram.png 'Diagram')
+![Diagram](images/diagram.png 'Diagram')
 
 ## FAQ
 
@@ -421,12 +420,6 @@ Below are a list of possible improvements identified. Please feel free to develo
 - Add instance protection to agents actively executing jobs
 - Add signaling to the master and agent bootstraping process
 - IAM policy document resources instead of plain json
-- ~~Add the ability to include custom iam policy details from variable inputs~~ / Added in v2.5.0
-- ~~Move towards launch templates instead of launch configuration~~ / Added in v2.5.0
-
-## Authors
-
-- [**Raul Dominguez**](mailto:raul_dominguez@neimanmarcus.com) - Project maintenance.
 
 ## Conduct / Contributing / License
 

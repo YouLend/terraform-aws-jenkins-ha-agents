@@ -286,7 +286,7 @@ resource "aws_launch_template" "master_lt" {
   ebs_optimized = false
 
   instance_type = var.master_instance_type
-  user_data     = data.template_cloudinit_config.master_init.rendered
+  user_data     = data.cloudinit_config.master_init.rendered
 
   monitoring {
     enabled = true
@@ -307,6 +307,8 @@ resource "aws_launch_template" "master_lt" {
     http_tokens = "required"
   }
   tags = merge(var.tags, { "Name" = "${var.application}-master-lt" })
+
+  update_default_version = true
 }
 
 #tfsec:ignore:aws-ec2-no-public-egress-sgr tfsec:ignore:aws-ec2-no-public-ingress-sgr tfsec:ignore:aws-vpc-no-public-egress-sgr tfsec:ignore:aws-vpc-no-public-ingress-sgr
