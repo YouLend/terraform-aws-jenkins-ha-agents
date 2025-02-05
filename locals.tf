@@ -47,7 +47,6 @@ locals {
     admin_password           = var.admin_password
     api_ssm_parameter        = "${var.ssm_parameter}${var.api_ssm_parameter}"
     application              = var.application
-    auto_update_plugins_cron = var.auto_update_plugins_cron
     aws_region               = var.region
     executors_min            = var.agent_min * var.executors
     master_logs              = aws_cloudwatch_log_group.master_logs.name
