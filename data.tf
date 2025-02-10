@@ -76,7 +76,7 @@ data "cloudinit_config" "master_init" {
 
   part {
     content_type = "text/cloud-config"
-    content      = var.custom_plugins
+    content      = var.extra_master_write_files
     merge_type   = "list(append)+dict(recurse_array)+str()"
   }
 

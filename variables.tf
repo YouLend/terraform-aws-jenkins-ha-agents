@@ -94,8 +94,8 @@ variable "cidr_ingress" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "custom_plugins" {
-  description = "Custom plugins to install alongside the defaults. Pull from outside the module."
+variable "extra_master_write_files" {
+  description = "Extra write files to add to the default built-in and to be merged with the extra_master_userdata."
   type        = string
   default     = ""
 }
