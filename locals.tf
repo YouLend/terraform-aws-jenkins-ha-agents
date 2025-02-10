@@ -53,11 +53,12 @@ locals {
     jenkins_name             = var.jenkins_name
   })
   master_runcmd = templatefile("${path.module}/init/master-runcmd.cfg", {
-    admin_password  = var.admin_password
-    aws_region      = var.region
-    jenkins_version = var.jenkins_version
-    master_storage  = aws_efs_file_system.master_efs.id
-    env_name        = var.env_name
+    admin_password   = var.admin_password
+    aws_region       = var.region
+    jenkins_version  = var.jenkins_version
+    master_storage   = aws_efs_file_system.master_efs.id
+    env_name         = var.env_name
+    jenkins_username = var.jenkins_username
 
   })
   master_end = templatefile("${path.module}/init/master-end.cfg", {})
