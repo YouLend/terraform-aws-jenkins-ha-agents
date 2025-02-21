@@ -215,7 +215,7 @@ resource "aws_autoscaling_group" "master_asg" {
   max_size = 1
   min_size = 1
 
-  health_check_grace_period = 1200
+  health_check_grace_period = 600
   health_check_type         = "ELB"
 
   name = "${var.application}-master-asg"

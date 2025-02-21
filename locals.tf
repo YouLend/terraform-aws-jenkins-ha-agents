@@ -44,21 +44,21 @@ locals {
   })
   qa_agent_end = templatefile("${path.module}/init/qa-agent-end.cfg", {})
   master_write_files = templatefile("${path.module}/init/master-write-files.cfg", {
-    admin_password           = var.admin_password
-    api_ssm_parameter        = "${var.ssm_parameter}${var.api_ssm_parameter}"
-    application              = var.application
-    auto_update_plugins_cron = var.auto_update_plugins_cron
-    aws_region               = var.region
-    executors_min            = var.agent_min * var.executors
-    master_logs              = aws_cloudwatch_log_group.master_logs.name
-    jenkins_name             = var.jenkins_name
+    admin_password    = var.admin_password
+    api_ssm_parameter = "${var.ssm_parameter}${var.api_ssm_parameter}"
+    application       = var.application
+    aws_region        = var.region
+    executors_min     = var.agent_min * var.executors
+    master_logs       = aws_cloudwatch_log_group.master_logs.name
+    jenkins_name      = var.jenkins_name
   })
   master_runcmd = templatefile("${path.module}/init/master-runcmd.cfg", {
-    admin_password  = var.admin_password
-    aws_region      = var.region
-    jenkins_version = var.jenkins_version
-    master_storage  = aws_efs_file_system.master_efs.id
-    env_name        = var.env_name
+    admin_password   = var.admin_password
+    aws_region       = var.region
+    jenkins_version  = var.jenkins_version
+    master_storage   = aws_efs_file_system.master_efs.id
+    env_name         = var.env_name
+    jenkins_username = var.jenkins_username
 
   })
   master_end = templatefile("${path.module}/init/master-end.cfg", {})
