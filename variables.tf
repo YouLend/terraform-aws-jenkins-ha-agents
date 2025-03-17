@@ -54,10 +54,14 @@ variable "agent_qa_volume_size" {
   default     = 16
 }
 
-variable "ami_name" {
-  description = "The name of the amzn2 ami. Used for searching for AMI id."
+variable "master_ami_regex" {
+  description = "The regex to match the name of the ami used for the master node. Used for searching for AMI id."
   type        = string
-  default     = "amzn2-ami-hvm-2.0.*-x86_64-gp2"
+}
+
+variable "agent_ami_regex" {
+  description = "The regex to match the name of the ami used for the agents. Used for searching for AMI id."
+  type        = string
 }
 
 variable "ami_owner" {

@@ -74,7 +74,7 @@ resource "aws_launch_template" "agent_qa_lt" {
     }
   }
 
-  image_id      = data.aws_ami.amzn2_ami.id
+  image_id      = data.aws_ami.agent_ami.id
   key_name      = var.key_name
   ebs_optimized = false
 
