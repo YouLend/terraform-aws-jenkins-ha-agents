@@ -189,14 +189,16 @@ data "aws_vpc" "vpc" {
   }
 }
 
-data "aws_ami" "amzn2_ami" {
+data "aws_ami" "master_ami" {
   most_recent = true
   owners      = [var.ami_owner]
+  name_regex  = var.master_ami_regex
+}
 
-  filter {
-    name   = "name"
-    values = [var.ami_name]
-  }
+data "aws_ami" "agent_ami" {
+  most_recent = true
+  owners      = [var.ami_owner]
+  name_regex  = var.agent_ami_regex
 }
 
 data "aws_kms_key" "ssm_key" {

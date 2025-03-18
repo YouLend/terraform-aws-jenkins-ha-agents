@@ -65,8 +65,10 @@ resource "aws_iam_role_policy" "master_inline_policy" {
       "Action": [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
         "logs:PutLogEvents",
-        "logs:DescribeLogStreams"
+        "logs:PutRetentionPolicy"
       ],
       "Effect": "Allow",
       "Resource": "${aws_cloudwatch_log_group.master_logs.arn}:*"
@@ -274,14 +276,14 @@ resource "aws_launch_template" "master_lt" {
     no_device   = true
 
     ebs {
-      volume_size           = 25
+      volume_size           = 36
       encrypted             = true
       delete_on_termination = true
       volume_type           = "gp3"
     }
   }
 
-  image_id      = data.aws_ami.amzn2_ami.id
+  image_id      = data.aws_ami.master_ami.id
   key_name      = var.key_name
   ebs_optimized = false
 
