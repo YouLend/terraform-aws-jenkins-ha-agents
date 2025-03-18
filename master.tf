@@ -276,7 +276,7 @@ resource "aws_launch_template" "master_lt" {
     no_device   = true
 
     ebs {
-      volume_size           = 25
+      volume_size           = 36
       encrypted             = true
       delete_on_termination = true
       volume_type           = "gp3"
