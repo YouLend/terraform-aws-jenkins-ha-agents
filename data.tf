@@ -192,13 +192,13 @@ data "aws_vpc" "vpc" {
 data "aws_ami" "master_ami" {
   most_recent = true
   owners      = [var.ami_owner]
-  name_regex = "${var.master_ami_regex}"
+  name_regex  = var.master_ami_regex
 }
 
 data "aws_ami" "agent_ami" {
   most_recent = true
   owners      = [var.ami_owner]
-  name_regex = "${var.agent_ami_regex}"
+  name_regex  = var.agent_ami_regex
 }
 
 data "aws_kms_key" "ssm_key" {
