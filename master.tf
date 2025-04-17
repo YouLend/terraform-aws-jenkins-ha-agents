@@ -53,6 +53,7 @@ resource "aws_iam_role_policy" "master_inline_policy" {
       "Action": [
         "ec2:DescribeInstances",
         "ec2:DescribeTags",
+        "ec2:AttachVolume",
         "s3:GetObject",
         "s3:GetObjectAcl",
         "s3:PutObject",
@@ -269,18 +270,6 @@ resource "aws_launch_template" "master_lt" {
 
   credit_specification {
     cpu_credits = "standard"
-  }
-
-  block_device_mappings {
-    device_name = "/dev/xvda"
-    no_device   = true
-
-    ebs {
-      volume_size           = 36
-      encrypted             = true
-      delete_on_termination = true
-      volume_type           = "gp3"
-    }
   }
 
   image_id      = data.aws_ami.master_ami.id
