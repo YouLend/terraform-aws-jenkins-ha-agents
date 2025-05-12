@@ -13,6 +13,14 @@ locals {
     swarm_version    = var.swarm_version
     jenkins_username = var.jenkins_username
   })
+  devops_agent_write_files = templatefile("${path.module}/init/agent-write-files.cfg", {
+    swarm_label      = "swarm-devops"
+    agent_logs       = aws_cloudwatch_log_group.agent_logs.name
+    aws_region       = var.region
+    executors        = var.executors
+    swarm_version    = var.swarm_version
+    jenkins_username = var.jenkins_username
+  })
   agent_runcmd = templatefile("${path.module}/init/agent-runcmd.cfg", {
     api_ssm_parameter = "${var.ssm_parameter}${var.api_ssm_parameter}"
     aws_master_region = var.aws_master_region
